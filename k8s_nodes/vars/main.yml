@@ -1,0 +1,15 @@
+---
+# vars file for k8s_nodes
+#
+#
+package_name:
+        - "docker"
+        - "kubelet"
+        - "kubeadm"
+        - "kubectl"
+        - "iproute-tc"
+
+package:
+        - "docker"
+        - "kubelet"
+

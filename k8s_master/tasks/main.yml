@@ -1,0 +1,64 @@
+---
+# tasks file for k8s_master
+#
+#
+- name: "Creating Repo for Kubernetes"
+  copy:
+          src: kubernetes.repo
+          dest: /etc/yum.repos.d/kubernetes.repo
+
+- name: "Installing Software"
+  package:
+          name: "{{ item }}"
+          state: present
+  loop: "{{ package_name }}"
+
+- name: "Starting services"
+  service:
+          name:  "{{ item }}" 
+          state: started
+  loop: "{{ package }}"
+
+- name: "Changing driver to systemd"
+  copy:
+          src: daemon.json
+          dest: /etc/docker/daemon.json
+
+- name: "Restart Docker Services"
+  service:
+          name: docker
+          state: restarted
+
+- name: "Pulling Images"
+  shell: kubeadm config images pull
+
+- name: "Bridge to 1" 
+  shell: echo "1" > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+- name: "kubeadm init"
+  shell: kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem --node-name MasterNode 
+  ignore_errors: yes
+
+- name: "Creating .kube directory"
+  file:
+    path: $HOME/.kube
+    state: directory
+
+- name: "Copying file"
+  shell: cp  -i  /etc/kubernetes/admin.conf  $HOME/.kube/config  
+
+- name: "Changing Owner Permissions"
+  shell: chown $(id -u):$(id -g) $HOME/.kube/config
+
+- name: "Setting up Flannel"
+  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  changed_when: False
+
+- name: "Token Creation"
+  shell: kubeadm  token create --print-join-command
+  register: token
+
+- name: "Printing Token"
+  debug:
+         var: token.stdout 
+

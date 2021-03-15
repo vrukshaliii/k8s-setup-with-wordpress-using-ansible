@@ -1,0 +1,5 @@
+- hosts: "tag_Name_K8S_Master"
+  roles:
+  - name: "WordPress Application"
+    role: /root/task23/k8s/wordpress
+

@@ -1,0 +1,16 @@
+- hosts: "tag_Name_K8S_Master"
+  roles:
+  - name: "K8S Master"
+    role: /root/k8s/k8s_master
+
+
+
+- hosts: ["tag_Name_K8S_Node1", "tag_Name_K8S_Node2"]
+  vars_prompt:
+    - name: token
+      prompt: "Enter token :"
+      private: no
+
+  roles:
+  - name: "K8S_Nodes"
+    role: /root/k8s/k8s_nodes

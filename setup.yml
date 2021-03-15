@@ -1,0 +1,7 @@
+- hosts: localhost
+  gather_facts: False 
+  #vars_files: secret.yml
+  roles: 
+  - name: "EC2 Launch"
+    role: /root/k8s/ec2
+

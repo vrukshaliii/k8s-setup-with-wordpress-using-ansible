@@ -1,0 +1,37 @@
+---
+# tasks file for k8s_nodes
+#
+#
+
+- name: "Creating Repo for Kubernetes"
+  copy:
+          src: kubernetes.repo
+          dest: /etc/yum.repos.d/kubernetes.repo
+
+- name: "Installing Software"
+  package:
+          name: "{{ item }}"
+          state: present
+  loop: "{{ package_name }}"
+
+- name: "Starting services"
+  service:
+          name:  "{{ item }}"
+          state: started
+  loop: "{{ package }}"
+
+- name: "Changing driver to systemd"
+  copy:
+          src: daemon.json
+          dest: /etc/docker/daemon.json
+
+- name: "Restart Docker Services"
+  service:
+          name: docker
+          state: restarted  
+
+- name: "Bridge to 1"
+  shell: echo "1" > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+- name: "Using token"
+  shell: "{{ token }}"

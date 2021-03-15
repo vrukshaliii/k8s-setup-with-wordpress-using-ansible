@@ -1,0 +1,13 @@
+---
+# vars file for wordpress
+#
+db_pod: "mydb1"
+wp_pod: "mywp1"
+sql_image: "mysql:5.7"
+wp_image: "wordpress:5.1.1-php7.3-apache"
+mysql_root_password: "redhat"
+database_name: "mywpdb"
+mysql_user: "vrush"
+mysql_password: "redhat"
+
+

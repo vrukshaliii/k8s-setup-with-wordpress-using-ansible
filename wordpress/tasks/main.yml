@@ -1,0 +1,28 @@
+---
+# tasks file for wordpress
+#
+#
+- name: "Launching MYSQL DB Pod"
+  shell: kubectl run "{{ db_pod }}" --image "{{ sql_image }}" --env=MYSQL_ROOT_PASSWORD={{ mysql_root_password }} --env=MYSQL_DATABASE={{ database_name }}  --env=MYSQL_USER={{ mysql_user }} --env=MYSQL_PASSWORD={{ mysql_password }}
+
+
+- name: "Launching WordPress Pod"
+  shell: kubectl run "{{ wp_pod }}" --image "{{ wp_image }}" 
+
+- name: "Exposing Pod"
+  shell: kubectl expose pod "{{ wp_pod }}" --type=NodePort --port=80
+  
+- name: "Get svc"
+  shell: kubectl get svc
+  register: svc
+
+- name: "Print"
+  debug:
+          var: svc.stdout
+
+- name: "Database IP"
+  shell: "kubectl get pods -o wide"
+  register: db_ip
+
+- debug:
+    var: "db_ip.stdout_lines"

@@ -1,0 +1,25 @@
+---
+# tasks file for ec2
+#
+#
+
+- name: "Launching EC2 Instance"
+  ec2:
+         key_name: "{{ key_name }}"
+         instance_type: "{{ instance_type }}"
+         image: "{{ image_id }}"
+         wait: yes
+         count: "{{ count }}"
+         #         instance_tags:
+         #       name: "sample_os"
+         vpc_subnet_id: "{{ subnet_id }}"
+         assign_public_ip: yes
+         state: present
+         region: "{{ region }}"
+         group_id: "{{ sg_group_id }}"
+         aws_access_key: "{{ aws_access_key }}"
+         aws_secret_key: "{{ aws_secret_key }}"
+         instance_tags:
+             Name: "{{ item }}"
+  loop: "{{ OS_name }}"
+

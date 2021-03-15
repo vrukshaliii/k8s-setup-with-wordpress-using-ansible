@@ -1,0 +1,17 @@
+---
+# vars file for ec2
+#
+#
+aws_access_key: "AKIA4UJQ7ZRGFTJED6VO"
+aws_secret_key: "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"
+key_name: "testing"
+image_id: "ami-038f1ca1bd58a5790"
+count: 1
+subnet_id: "subnet-52bc140d"
+region: "us-east-1"
+sg_group_id: "sg-0639b0dd0a69545ea"
+instance_type: "t2.micro"
+OS_name:
+     - "K8S_Master"
+     - "K8S_Node1"
+     - "K8S_Node2"
